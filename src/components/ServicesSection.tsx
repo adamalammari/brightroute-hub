@@ -1,9 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Plane, Ship, Truck, Clock, Shield, Headphones } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const services = [
   { icon: Plane, title: "الشحن الجوي", desc: "خدمات شحن جوي سريعة وآمنة لجميع أنحاء العالم مع تتبع مباشر لشحناتك.", color: "text-secondary", bg: "bg-secondary/10" },
@@ -15,26 +12,12 @@ const services = [
 ];
 
 const ServicesSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".services-heading", {
-        scrollTrigger: { trigger: ".services-heading", start: "top 90%", toggleActions: "play none none none" },
-        y: 50, opacity: 0, duration: 0.8, ease: "power3.out",
-      });
-      gsap.from(".service-card", {
-        scrollTrigger: { trigger: ".service-grid", start: "top 90%", toggleActions: "play none none none" },
-        y: 60, opacity: 0, duration: 0.6, stagger: 0.12, ease: "power2.out",
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
+  const [ref, isVisible] = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={sectionRef} id="services" className="py-24 bg-surface" dir="rtl">
+    <section ref={ref} id="services" className="py-24 bg-surface" dir="rtl">
       <div className="section-container">
-        <div className="text-center mb-16 services-heading">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
           <span className="text-sm font-semibold text-secondary uppercase tracking-widest">خدماتنا</span>
           <h2 className="text-3xl md:text-5xl font-extrabold text-primary mt-3">
             حلول شحن <span className="text-gradient">شاملة ومتكاملة</span>
@@ -44,11 +27,14 @@ const ServicesSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 service-grid">
-          {services.map((s) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((s, i) => (
             <div
               key={s.title}
-              className="service-card group bg-background rounded-2xl p-8 border border-border/50 hover:border-secondary/30 hover:shadow-xl hover:shadow-secondary/5 transition-all duration-500 hover:-translate-y-2"
+              className={`group bg-background rounded-2xl p-8 border border-border/50 hover:border-secondary/30 hover:shadow-xl hover:shadow-secondary/5 transition-all duration-500 hover:-translate-y-2 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+              }`}
+              style={{ transitionDelay: isVisible ? `${i * 100}ms` : "0ms" }}
             >
               <div className={`w-14 h-14 rounded-xl ${s.bg} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
                 <s.icon className={`w-7 h-7 ${s.color}`} />
