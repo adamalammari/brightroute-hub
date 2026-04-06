@@ -1,9 +1,6 @@
-import { useRef, useEffect, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const faqs = [
   {
@@ -34,26 +31,12 @@ const faqs = [
 
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".faq-title", {
-        scrollTrigger: { trigger: ".faq-title", start: "top 90%", toggleActions: "play none none none" },
-        y: 40, opacity: 0, duration: 0.8, ease: "power3.out",
-      });
-      gsap.from(".faq-item", {
-        scrollTrigger: { trigger: ".faq-list", start: "top 90%", toggleActions: "play none none none" },
-        y: 30, opacity: 0, duration: 0.5, stagger: 0.1, ease: "power2.out",
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
+  const [ref, isVisible] = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={sectionRef} id="faq" className="py-24 bg-background" dir="rtl">
+    <section ref={ref} id="faq" className="py-24 bg-background" dir="rtl">
       <div className="section-container">
-        <div className="text-center mb-16 faq-title">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
           <span className="text-sm font-semibold text-secondary uppercase tracking-widest">الأسئلة الشائعة</span>
           <h2 className="text-3xl md:text-5xl font-extrabold text-primary mt-3">
             كل ما تحتاج <span className="text-gradient">معرفته</span>
@@ -63,11 +46,14 @@ const FAQSection = () => {
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-4 faq-list">
+        <div className="max-w-3xl mx-auto space-y-4">
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="faq-item bg-surface rounded-2xl border border-border/50 overflow-hidden transition-all duration-300 hover:border-secondary/30"
+              className={`bg-card rounded-2xl border border-border/50 overflow-hidden transition-all duration-500 hover:border-secondary/30 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+              style={{ transitionDelay: isVisible ? `${200 + i * 80}ms` : "0ms" }}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}

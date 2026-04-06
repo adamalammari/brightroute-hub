@@ -1,11 +1,7 @@
-import { useEffect, useRef } from "react";
 import portfolio1 from "@/assets/portfolio-1.jpg";
 import portfolio2 from "@/assets/portfolio-2.jpg";
 import portfolio3 from "@/assets/portfolio-3.jpg";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const projects = [
   { image: portfolio1, title: "نقل بري دولي", desc: "إدارة أسطول نقل بري يربط 12 دولة بكفاءة عالية", tag: "نقل بري" },
@@ -14,40 +10,12 @@ const projects = [
 ];
 
 const PortfolioSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".portfolio-heading", {
-        scrollTrigger: { trigger: ".portfolio-heading", start: "top 90%", toggleActions: "play none none none" },
-        y: 50, opacity: 0, duration: 0.8, ease: "power3.out",
-      });
-
-      gsap.from(".portfolio-card", {
-        scrollTrigger: { trigger: ".portfolio-grid", start: "top 90%", toggleActions: "play none none none" },
-        y: 80, opacity: 0, scale: 0.9, duration: 0.7, stagger: 0.2, ease: "power3.out",
-      });
-
-      document.querySelectorAll(".portfolio-img").forEach((img) => {
-        gsap.to(img, {
-          yPercent: -15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: img.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
+  const [ref, isVisible] = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={sectionRef} id="portfolio" className="py-24 bg-surface" dir="rtl">
+    <section ref={ref} id="portfolio" className="py-24 bg-muted" dir="rtl">
       <div className="section-container">
-        <div className="text-center mb-16 portfolio-heading">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
           <span className="text-sm font-semibold text-secondary uppercase tracking-widest">أعمالنا</span>
           <h2 className="text-3xl md:text-5xl font-extrabold text-primary mt-3">
             مشاريع <span className="text-gradient">ناجحة ومتميزة</span>
@@ -57,14 +25,17 @@ const PortfolioSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 portfolio-grid">
-          {projects.map((p) => (
+        <div className="grid md:grid-cols-3 gap-8">
+          {projects.map((p, i) => (
             <div
               key={p.title}
-              className="portfolio-card group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+              className={`group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 ${
+                isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"
+              }`}
+              style={{ transitionDelay: isVisible ? `${i * 150}ms` : "0ms" }}
             >
               <div className="overflow-hidden h-72">
-                <img src={p.image} alt={p.title} className="portfolio-img w-full h-[120%] object-cover scale-110" />
+                <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent" />
               <div className="absolute bottom-0 p-6 space-y-2">

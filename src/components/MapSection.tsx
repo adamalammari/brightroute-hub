@@ -1,8 +1,4 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const hubs = [
   { name: "دبي", top: "45%", left: "62%" },
@@ -15,44 +11,12 @@ const hubs = [
 ];
 
 const MapSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".map-heading", {
-        scrollTrigger: { trigger: ".map-heading", start: "top 90%", toggleActions: "play none none none" },
-        y: 50, opacity: 0, duration: 0.8, ease: "power3.out",
-      });
-
-      gsap.from(".map-container", {
-        scrollTrigger: { trigger: ".map-container", start: "top 90%", toggleActions: "play none none none" },
-        scale: 0.85, opacity: 0, duration: 1, ease: "power3.out",
-      });
-
-      gsap.from(".hub-dot", {
-        scrollTrigger: { trigger: ".map-container", start: "top 85%", toggleActions: "play none none none" },
-        scale: 0, opacity: 0, duration: 0.4, stagger: 0.1, ease: "back.out(2)",
-      });
-
-      document.querySelectorAll(".route-path").forEach((path) => {
-        const el = path as SVGPathElement;
-        const length = el.getTotalLength();
-        gsap.set(el, { strokeDasharray: length, strokeDashoffset: length });
-        gsap.to(el, {
-          strokeDashoffset: 0,
-          duration: 2,
-          ease: "power2.inOut",
-          scrollTrigger: { trigger: ".map-container", start: "top 85%", toggleActions: "play none none none" },
-        });
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
+  const [ref, isVisible] = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={sectionRef} id="map" className="py-24 gradient-navy" dir="rtl">
+    <section ref={ref} id="map" className="py-24 gradient-navy" dir="rtl">
       <div className="section-container">
-        <div className="text-center mb-16 map-heading">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
           <span className="text-sm font-semibold text-accent uppercase tracking-widest">شبكتنا العالمية</span>
           <h2 className="text-3xl md:text-5xl font-extrabold text-primary-foreground mt-3">
             نصل إلى كل مكان <span className="text-accent">حول العالم</span>
@@ -62,7 +26,7 @@ const MapSection = () => {
           </p>
         </div>
 
-        <div className="relative max-w-5xl mx-auto map-container">
+        <div className={`relative max-w-5xl mx-auto transition-all duration-1000 delay-200 ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}>
           <div className="relative aspect-[2/1] rounded-2xl overflow-hidden border border-primary-foreground/10">
             <svg viewBox="0 0 1000 500" className="w-full h-full" fill="none">
               <path d="M150,150 Q200,100 280,120 T400,110 Q430,100 460,120 T520,130 L530,180 Q500,200 460,190 T380,200 Q350,220 300,210 T200,200 Q170,190 150,150Z" fill="hsl(217 91% 60% / 0.1)" stroke="hsl(217 91% 60% / 0.3)" strokeWidth="1" />
@@ -71,13 +35,17 @@ const MapSection = () => {
               <path d="M500,200 Q530,190 560,210 T600,230 Q610,260 590,300 T540,340 L500,330 Q480,300 490,260 T500,200Z" fill="hsl(217 91% 60% / 0.1)" stroke="hsl(217 91% 60% / 0.3)" strokeWidth="1" />
               <path d="M200,220 Q240,200 300,230 T380,250 Q400,280 380,330 T320,380 L260,370 Q230,340 220,300 T200,220Z" fill="hsl(217 91% 60% / 0.1)" stroke="hsl(217 91% 60% / 0.3)" strokeWidth="1" />
               <path d="M700,250 Q740,230 800,260 T860,300 Q870,340 840,380 T780,400 L720,380 Q700,350 710,310 T700,250Z" fill="hsl(217 91% 60% / 0.1)" stroke="hsl(217 91% 60% / 0.3)" strokeWidth="1" />
-              <path className="route-path" d="M250,150 Q400,200 570,160" stroke="hsl(25 95% 53% / 0.6)" strokeWidth="2" />
-              <path className="route-path" d="M570,160 Q650,180 780,150" stroke="hsl(25 95% 53% / 0.6)" strokeWidth="2" />
-              <path className="route-path" d="M570,160 Q600,220 760,270" stroke="hsl(25 95% 53% / 0.6)" strokeWidth="2" />
+              <path d="M250,150 Q400,200 570,160" stroke="hsl(25 95% 53% / 0.6)" strokeWidth="2" />
+              <path d="M570,160 Q650,180 780,150" stroke="hsl(25 95% 53% / 0.6)" strokeWidth="2" />
+              <path d="M570,160 Q600,220 760,270" stroke="hsl(25 95% 53% / 0.6)" strokeWidth="2" />
             </svg>
 
-            {hubs.map((hub) => (
-              <div key={hub.name} className="hub-dot absolute group" style={{ top: hub.top, left: hub.left, transform: "translate(-50%,-50%)" }}>
+            {hubs.map((hub, i) => (
+              <div
+                key={hub.name}
+                className={`absolute group transition-all duration-500 ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-0"}`}
+                style={{ top: hub.top, left: hub.left, transform: "translate(-50%,-50%)", transitionDelay: isVisible ? `${400 + i * 80}ms` : "0ms" }}
+              >
                 <div className="relative">
                   <div className="w-3 h-3 rounded-full bg-accent" />
                   <div className="absolute w-3 h-3 rounded-full bg-accent/50 animate-ping top-0 left-0" />

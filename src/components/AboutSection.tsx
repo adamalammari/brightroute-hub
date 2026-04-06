@@ -1,10 +1,6 @@
-import { useEffect, useRef } from "react";
 import aboutImage from "@/assets/about-warehouse.jpg";
 import { CheckCircle2 } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const features = [
   "أكثر من 15 عاماً من الخبرة في مجال الخدمات اللوجستية",
@@ -14,42 +10,15 @@ const features = [
 ];
 
 const AboutSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.to(".about-image", {
-        yPercent: -10,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      gsap.from(imageRef.current, {
-        scrollTrigger: { trigger: imageRef.current, start: "top 90%", toggleActions: "play none none none" },
-        x: -80, opacity: 0, duration: 1, ease: "power3.out",
-      });
-
-      gsap.from(".about-content > *", {
-        scrollTrigger: { trigger: ".about-content", start: "top 90%", toggleActions: "play none none none" },
-        x: 60, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out",
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
+  const [ref, isVisible] = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={sectionRef} id="about" className="py-24 bg-background overflow-hidden" dir="rtl">
+    <section ref={ref} id="about" className="py-24 bg-background overflow-hidden" dir="rtl">
       <div className="section-container">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div ref={imageRef} className="relative">
+          <div className={`relative transition-all duration-1000 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-16"}`}>
             <div className="rounded-2xl overflow-hidden shadow-2xl">
-              <img src={aboutImage} alt="مستودع حديث ومتطور" className="about-image w-full h-[450px] object-cover" />
+              <img src={aboutImage} alt="مستودع حديث ومتطور" className="w-full h-[450px] object-cover" />
             </div>
             <div className="absolute -bottom-6 -left-6 bg-background rounded-xl p-5 shadow-xl border border-border/50 animate-float">
               <div className="text-3xl font-extrabold text-accent">+15</div>
@@ -57,7 +26,7 @@ const AboutSection = () => {
             </div>
           </div>
 
-          <div className="about-content space-y-6">
+          <div className={`space-y-6 transition-all duration-1000 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-16"}`}>
             <span className="text-sm font-semibold text-secondary uppercase tracking-widest">من نحن</span>
             <h2 className="text-3xl md:text-5xl font-extrabold text-primary leading-tight">
               شريكك الموثوق في
