@@ -20,21 +20,20 @@ const MapSection = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".map-heading", {
-        scrollTrigger: { trigger: ".map-heading", start: "top 85%" },
+        scrollTrigger: { trigger: ".map-heading", start: "top 90%", toggleActions: "play none none none" },
         y: 50, opacity: 0, duration: 0.8, ease: "power3.out",
       });
 
       gsap.from(".map-container", {
-        scrollTrigger: { trigger: ".map-container", start: "top 80%" },
+        scrollTrigger: { trigger: ".map-container", start: "top 90%", toggleActions: "play none none none" },
         scale: 0.85, opacity: 0, duration: 1, ease: "power3.out",
       });
 
       gsap.from(".hub-dot", {
-        scrollTrigger: { trigger: ".map-container", start: "top 70%" },
+        scrollTrigger: { trigger: ".map-container", start: "top 85%", toggleActions: "play none none none" },
         scale: 0, opacity: 0, duration: 0.4, stagger: 0.1, ease: "back.out(2)",
       });
 
-      // Animate route paths drawing
       document.querySelectorAll(".route-path").forEach((path) => {
         const el = path as SVGPathElement;
         const length = el.getTotalLength();
@@ -43,7 +42,7 @@ const MapSection = () => {
           strokeDashoffset: 0,
           duration: 2,
           ease: "power2.inOut",
-          scrollTrigger: { trigger: ".map-container", start: "top 70%" },
+          scrollTrigger: { trigger: ".map-container", start: "top 85%", toggleActions: "play none none none" },
         });
       });
     }, sectionRef);

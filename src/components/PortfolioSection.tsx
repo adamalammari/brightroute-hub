@@ -19,16 +19,15 @@ const PortfolioSection = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".portfolio-heading", {
-        scrollTrigger: { trigger: ".portfolio-heading", start: "top 85%" },
+        scrollTrigger: { trigger: ".portfolio-heading", start: "top 90%", toggleActions: "play none none none" },
         y: 50, opacity: 0, duration: 0.8, ease: "power3.out",
       });
 
       gsap.from(".portfolio-card", {
-        scrollTrigger: { trigger: ".portfolio-grid", start: "top 80%" },
+        scrollTrigger: { trigger: ".portfolio-grid", start: "top 90%", toggleActions: "play none none none" },
         y: 80, opacity: 0, scale: 0.9, duration: 0.7, stagger: 0.2, ease: "power3.out",
       });
 
-      // Parallax on each card image
       document.querySelectorAll(".portfolio-img").forEach((img) => {
         gsap.to(img, {
           yPercent: -15,
