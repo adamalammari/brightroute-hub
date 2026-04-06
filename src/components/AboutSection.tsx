@@ -19,7 +19,6 @@ const AboutSection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Parallax image
       gsap.to(".about-image", {
         yPercent: -10,
         ease: "none",
@@ -32,12 +31,12 @@ const AboutSection = () => {
       });
 
       gsap.from(imageRef.current, {
-        scrollTrigger: { trigger: imageRef.current, start: "top 80%" },
+        scrollTrigger: { trigger: imageRef.current, start: "top 90%", toggleActions: "play none none none" },
         x: -80, opacity: 0, duration: 1, ease: "power3.out",
       });
 
       gsap.from(".about-content > *", {
-        scrollTrigger: { trigger: ".about-content", start: "top 80%" },
+        scrollTrigger: { trigger: ".about-content", start: "top 90%", toggleActions: "play none none none" },
         x: 60, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out",
       });
     }, sectionRef);

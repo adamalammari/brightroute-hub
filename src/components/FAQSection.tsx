@@ -1,8 +1,7 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown, HelpCircle } from "lucide-react";
-import { useState } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,19 +39,12 @@ const FAQSection = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".faq-title", {
-        scrollTrigger: { trigger: ".faq-title", start: "top 85%" },
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
+        scrollTrigger: { trigger: ".faq-title", start: "top 90%", toggleActions: "play none none none" },
+        y: 40, opacity: 0, duration: 0.8, ease: "power3.out",
       });
       gsap.from(".faq-item", {
-        scrollTrigger: { trigger: ".faq-list", start: "top 80%" },
-        y: 30,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: "power2.out",
+        scrollTrigger: { trigger: ".faq-list", start: "top 90%", toggleActions: "play none none none" },
+        y: 30, opacity: 0, duration: 0.5, stagger: 0.1, ease: "power2.out",
       });
     }, sectionRef);
     return () => ctx.revert();

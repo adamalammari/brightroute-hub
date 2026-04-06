@@ -7,10 +7,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   { icon: Plane, title: "الشحن الجوي", desc: "خدمات شحن جوي سريعة وآمنة لجميع أنحاء العالم مع تتبع مباشر لشحناتك.", color: "text-secondary", bg: "bg-secondary/10" },
-  { icon: Ship, title: "الشحن البحري", desc: "حلول شحن بحري اقتصادية للبضائع الكبيرة مع تغطية لأهم الموانئ العالمية.", color: "text-electric", bg: "bg-electric/10" },
+  { icon: Ship, title: "الشحن البحري", desc: "حلول شحن بحري اقتصادية للبضائع الكبيرة مع تغطية لأهم الموانئ العالمية.", color: "text-secondary", bg: "bg-secondary/10" },
   { icon: Truck, title: "الشحن البري", desc: "شبكة نقل بري واسعة تربط المدن والدول بكفاءة عالية وتكلفة مناسبة.", color: "text-accent", bg: "bg-accent/10" },
   { icon: Clock, title: "التوصيل السريع", desc: "خدمة التوصيل العاجل لضمان وصول شحناتك في أسرع وقت ممكن.", color: "text-secondary", bg: "bg-secondary/10" },
-  { icon: Shield, title: "التأمين على الشحنات", desc: "تأمين شامل على جميع الشحنات لحمايتها من أي مخاطر أثناء النقل.", color: "text-electric", bg: "bg-electric/10" },
+  { icon: Shield, title: "التأمين على الشحنات", desc: "تأمين شامل على جميع الشحنات لحمايتها من أي مخاطر أثناء النقل.", color: "text-secondary", bg: "bg-secondary/10" },
   { icon: Headphones, title: "دعم على مدار الساعة", desc: "فريق دعم متخصص متاح 24/7 لمساعدتك في كل خطوة من عملية الشحن.", color: "text-accent", bg: "bg-accent/10" },
 ];
 
@@ -20,11 +20,11 @@ const ServicesSection = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".services-heading", {
-        scrollTrigger: { trigger: ".services-heading", start: "top 85%" },
+        scrollTrigger: { trigger: ".services-heading", start: "top 90%", toggleActions: "play none none none" },
         y: 50, opacity: 0, duration: 0.8, ease: "power3.out",
       });
       gsap.from(".service-card", {
-        scrollTrigger: { trigger: ".service-grid", start: "top 80%" },
+        scrollTrigger: { trigger: ".service-grid", start: "top 90%", toggleActions: "play none none none" },
         y: 60, opacity: 0, duration: 0.6, stagger: 0.12, ease: "power2.out",
       });
     }, sectionRef);

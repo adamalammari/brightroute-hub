@@ -5,7 +5,6 @@ const Footer = () => {
     <footer className="gradient-navy py-16" dir="rtl">
       <div className="section-container">
         <div className="grid md:grid-cols-4 gap-12">
-          {/* Brand */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-2 font-display font-extrabold text-xl text-primary-foreground">
               <Truck className="w-7 h-7 text-accent" />
@@ -16,27 +15,23 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Quick links */}
           <div>
             <h4 className="font-display font-bold text-primary-foreground mb-4">روابط سريعة</h4>
             <ul className="space-y-2">
               {["الرئيسية", "خدماتنا", "من نحن", "أعمالنا", "تواصل معنا"].map((l) => (
                 <li key={l}>
-                  <a href="#" className="text-sm text-primary-foreground/50 hover:text-accent transition-colors">
-                    {l}
-                  </a>
+                  <a href="#" className="text-sm text-primary-foreground/50 hover:text-accent transition-colors">{l}</a>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact */}
           <div>
             <h4 className="font-display font-bold text-primary-foreground mb-4">تواصل معنا</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-sm text-primary-foreground/50">
                 <Phone className="w-4 h-4 text-accent" />
-                <span dir="ltr">+966 50 000 0000</span>
+                <a href="tel:+966551234567" className="hover:text-accent transition-colors" dir="ltr">+966 55 123 4567</a>
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/50">
                 <Mail className="w-4 h-4 text-accent" />
